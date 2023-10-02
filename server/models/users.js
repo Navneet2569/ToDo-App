@@ -1,31 +1,32 @@
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
+import { config } from "dotenv";
 
 const userSchema = new mongoose.Schema({
   name: {
-    type: String,
+    type: "String",
     required: true,
   },
   email: {
-    type: String,
+    type: "String",
     required: true,
     unique: true,
   },
   password: {
-    type: String,
+    type: "String",
     required: true,
     minlength: [8, "Password must be atleast 8 characters long"],
     select: false,
   },
   avatar: {
-    public_id: String,
-    url: String,
+    public_id: "String",
+    url: "String",
   },
   createdAt: {
     type: Date,
     default: Date.now,
   },
-  task: [
+  tasks: [
     {
       title: "String",
       description: "String",
@@ -33,6 +34,10 @@ const userSchema = new mongoose.Schema({
       createdAt: Date,
     },
   ],
+  verified: {
+    type: Boolean,
+    default: false,
+  },
   otp: Number,
   otp_expiry: Date,
 });

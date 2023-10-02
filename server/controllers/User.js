@@ -6,7 +6,7 @@ export const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    const { avatar } = req.files;
+    // const { avatar } = req.files;
 
     let user = await User.findOne({ email });
 
@@ -22,13 +22,21 @@ export const register = async (req, res) => {
       name,
       email,
       password,
-      avatar,
+      // avatar: {
+      //   public_id: "",
+      //   url: "",
+      // },
       otp,
       otp_expiry: new Date(Date.now() + process.env.OTP_EXPIRE * 60 * 1000),
     });
     await sendMail(email, "Verify your account", `Your OTP is ${otp}`);
 
-    sendToken(res, user, 200, message);
+    sendToken(
+      res,
+      user,
+      200,
+      "OTP sent to your email. Please verify your account"
+    );
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
