@@ -1,4 +1,6 @@
 import { User } from "../models/users.js";
+import { sendMail } from "../utils/sendMail.js";
+import { sendToken } from "../utils/sendToken.js";
 
 export const register = async (req, res) => {
   try {
@@ -24,6 +26,9 @@ export const register = async (req, res) => {
       otp,
       otp_expiry: new Date(Date.now() + process.env.OTP_EXPIRE * 60 * 1000),
     });
+    await sendMail(email, "Verify your account", `Your OTP is ${otp}`);
+
+    sendToken(res, user, 200, message);
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
